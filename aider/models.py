@@ -187,6 +187,16 @@ MODEL_SETTINGS = [
     ),
     # Groq llama3
     ModelSettings(
+        "codestral",
+        "diff",
+        weak_model_name="codestral-weak",
+        use_repo_map=True,
+        send_undo_reply=True,
+        accepts_images=False,
+        lazy=True,
+        reminder_as_sys_msg=True,
+    ),
+    ModelSettings(
         "groq/llama3-70b-8192",
         "diff",
         weak_model_name="groq/llama3-8b-8192",

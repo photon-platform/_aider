@@ -302,6 +302,12 @@ def main(argv=None, input=None, output=None, force_git_root=None, return_coder=F
         models.print_matching_models(io, args.models)
         return 0
 
+    if args.model == "codestral":
+        io.tool_output("Initializing Codestral model...")
+        # Add any specific initialization or configuration for Codestral here
+        models.print_matching_models(io, args.models)
+        return 0
+
     if args.git:
         git_root = setup_git(git_root, io)
         if args.gitignore:

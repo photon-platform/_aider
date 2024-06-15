@@ -1,7 +1,9 @@
-*.pyc
-.aider*
-aider_chat.egg-info/
-build
-Gemfile.lock
-_site
-.jekyll-cache/
+*.egg-info
+*.egg-info/
+dist/
+*.py[cod]
+*.swp
+.doctrees
+.ipynb_checkpoints
+__pycache__
+tags

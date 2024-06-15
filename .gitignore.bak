@@ -1,0 +1,7 @@
+*.pyc
+.aider*
+aider_chat.egg-info/
+build
+Gemfile.lock
+_site
+.jekyll-cache/

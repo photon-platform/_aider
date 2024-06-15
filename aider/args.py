@@ -1,9 +1,15 @@
+#!/usr/bin/env python
+
 import argparse
 import os
+import sys
 
 import configargparse
 
 from aider import __version__, models
+from aider.args_formatter import MarkdownHelpFormatter, YamlHelpFormatter
+
+from .dump import dump  # noqa: F401
 
 
 def get_parser(default_config_files, git_root):
@@ -11,7 +17,6 @@ def get_parser(default_config_files, git_root):
         description="aider is GPT powered coding in your terminal",
         add_config_file_help=True,
         default_config_files=default_config_files,
-        config_file_parser_class=configargparse.YAMLConfigFileParser,
         auto_env_var_prefix="AIDER_",
     )
     group = parser.add_argument_group("Main")
@@ -31,7 +36,7 @@ def get_parser(default_config_files, git_root):
         "--anthropic-api-key",
         metavar="ANTHROPIC_API_KEY",
         env_var="ANTHROPIC_API_KEY",
-        help="Specify the OpenAI API key",
+        help="Specify the Anthropic API key",
     )
     default_model = models.DEFAULT_MODEL_NAME
     group.add_argument(
@@ -129,6 +134,12 @@ def get_parser(default_config_files, git_root):
         metavar="OPENAI_ORGANIZATION_ID",
         env_var="OPENAI_ORGANIZATION_ID",
         help="Specify the OpenAI organization ID",
+    )
+    group.add_argument(
+        "--model-metadata-file",
+        metavar="MODEL_FILE",
+        default=None,
+        help="Specify a file with context window and costs for unknown models",
     )
     group.add_argument(
         "--edit-format",
@@ -353,6 +364,12 @@ def get_parser(default_config_files, git_root):
     ##########
     group = parser.add_argument_group("Other Settings")
     group.add_argument(
+        "--vim",
+        action="store_true",
+        help="Use VI editing mode in the terminal (default: False)",
+        default=False,
+    )
+    group.add_argument(
         "--voice-language",
         metavar="VOICE_LANGUAGE",
         default="en",
@@ -447,3 +464,45 @@ def get_parser(default_config_files, git_root):
     )
 
     return parser
+
+
+def get_md_help():
+    os.environ["COLUMNS"] = "70"
+    sys.argv = ["aider"]
+    parser = get_parser([], None)
+
+    # This instantiates all the action.env_var values
+    parser.parse_known_args()
+
+    parser.formatter_class = MarkdownHelpFormatter
+
+    return argparse.ArgumentParser.format_help(parser)
+    return parser.format_help()
+
+
+def get_sample_yaml():
+    os.environ["COLUMNS"] = "100"
+    sys.argv = ["aider"]
+    parser = get_parser([], None)
+
+    # This instantiates all the action.env_var values
+    parser.parse_known_args()
+
+    parser.formatter_class = YamlHelpFormatter
+
+    return argparse.ArgumentParser.format_help(parser)
+    return parser.format_help()
+
+
+def main():
+    arg = sys.argv[1] if len(sys.argv[1:]) else None
+
+    if arg == "md":
+        print(get_md_help())
+    else:
+        print(get_sample_yaml())
+
+
+if __name__ == "__main__":
+    status = main()
+    sys.exit(status)

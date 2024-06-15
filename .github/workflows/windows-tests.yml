@@ -2,9 +2,15 @@ name: Windows Python Tests
 
 on:
   push:
+    paths-ignore:
+      - 'website/**'
+      - README.md
     branches:
       - main
   pull_request:
+    paths-ignore:
+      - 'website/**'
+      - README.md
     branches:
       - main
 
@@ -35,4 +41,4 @@ jobs:
 
     - name: Run tests
       run: |
-        python -m unittest discover -s tests
+        python -m unittest discover -s aider/tests

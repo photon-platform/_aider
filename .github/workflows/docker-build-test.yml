@@ -2,9 +2,15 @@ name: Docker Build Test
 
 on:
   push:
+    paths-ignore:
+      - 'website/**'
+      - README.md
     branches:
       - main
   pull_request:
+    paths-ignore:
+      - 'website/**'
+      - README.md
     branches:
       - main
 
